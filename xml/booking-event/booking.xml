@@ -1,0 +1,7 @@
+<application xmlns="http://www.zetcom.com/ria/ws/module">
+    <modules>
+        <module name="Booking" totalSize="1">
+            <moduleItem>{{content}}</moduleItem>
+        </module>
+    </modules>
+</application>

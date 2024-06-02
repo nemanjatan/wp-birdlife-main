@@ -1,0 +1,25 @@
+<application
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.zetcom.com/ria/ws/module/search"
+        xsi:schemaLocation="http://www.zetcom.com/ria/ws/module/search http://www.zetcom.com/ria/ws/module/search/search_1_1.xsd">
+    <modules>
+        <module name="Event">
+            <search limit="10" offset="0">
+                <expert>
+                    <or>
+                        <equalsField fieldPath="__id" operand="99162"/>
+                        <equalsField fieldPath="EvtStatusVrt" operand="ausgeschrieben"/>
+                        <equalsField fieldPath="EvtStatusVrt" operand="in Durchführung"/>
+                        <equalsField fieldPath="EvtStatusVrt" operand="abgesagt"/>
+<!--                        <equalsField fieldPath="EvtCurrentStatusVrt" operand="in Planung; ausgeschrieben"/>-->
+<!--                        <equalsField fieldPath="EvtCurrentStatusVrt" operand="ausgeschrieben; in Durchführung"/>-->
+<!--                        <equalsField fieldPath="EvtCurrentStatusVrt" operand="ausgeschrieben; abgeschlossen"/>-->
+                    </or>
+                </expert>
+                <select>
+                    <field fieldPath="__id"/>
+                </select>
+            </search>
+        </module>
+    </modules>
+</application>

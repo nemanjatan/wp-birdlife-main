@@ -1,0 +1,14 @@
+<application
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.zetcom.com/ria/ws/module/search"
+        xsi:schemaLocation="http://www.zetcom.com/ria/ws/module/search http://www.zetcom.com/ria/ws/module/search/search_1_1.xsd">
+    <modules>
+        <module name="Project">
+            <search limit="10" offset="0">
+                <select>
+                    <field fieldPath="__id"/>
+                </select>
+            </search>
+        </module>
+    </modules>
+</application>
