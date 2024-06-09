@@ -11,9 +11,9 @@
                         <equalsField fieldPath="EvtStatusVrt" operand="ausgeschrieben"/>
                         <equalsField fieldPath="EvtStatusVrt" operand="in Durchführung"/>
                         <equalsField fieldPath="EvtStatusVrt" operand="abgesagt"/>
-<!--                        <equalsField fieldPath="EvtCurrentStatusVrt" operand="in Planung; ausgeschrieben"/>-->
-<!--                        <equalsField fieldPath="EvtCurrentStatusVrt" operand="ausgeschrieben; in Durchführung"/>-->
-<!--                        <equalsField fieldPath="EvtCurrentStatusVrt" operand="ausgeschrieben; abgeschlossen"/>-->
+                        <!--                        <equalsField fieldPath="EvtCurrentStatusVrt" operand="in Planung; ausgeschrieben"/>-->
+                        <!--                        <equalsField fieldPath="EvtCurrentStatusVrt" operand="ausgeschrieben; in Durchführung"/>-->
+                        <!--                        <equalsField fieldPath="EvtCurrentStatusVrt" operand="ausgeschrieben; abgeschlossen"/>-->
                     </or>
                 </expert>
                 <select>

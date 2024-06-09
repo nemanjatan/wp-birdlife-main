@@ -31,8 +31,9 @@ if ( ! class_exists( 'WP_Birdlife_Event_Multimedia' ) ) {
 			$multimedia_json        = json_encode( $parsed_multimedia_xml );
 			$parsed_multimedia_json = json_decode( $multimedia_json, true );
 
-			return array( 'image_data'       => $resp['body'],
-			              'multimedia_items' => $parsed_multimedia_json['modules']['module']['moduleItem']
+			return array(
+				'image_data'       => $resp['body'],
+				'multimedia_items' => $parsed_multimedia_json['modules']['module']['moduleItem']
 			);
 		}
 

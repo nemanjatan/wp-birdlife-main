@@ -31,7 +31,7 @@ if ( ! class_exists( 'WP_Birdlife_Project_Post_Type' ) ) {
 					'publicly_queryable'  => true,
 					'show_in_rest'        => true,
 					'menu_icon'           => 'dashicons-editor-bold',
-					'rewrite'   => array( 'slug' => 'naturforderung-project' )
+					'rewrite'             => array( 'slug' => 'naturforderung-project' )
 				)
 			);
 		}
