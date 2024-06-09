@@ -2,7 +2,7 @@
 /**
  * Plugin Name: WP BirdLife
  * Description: WP BirdLife plugin handles ManagePlus API calls to fetch & update events
- * Version: 1.0.1
+ * Version: 1.0.2
  * Requires at least: 5.6
  * Author: Nemanja Tanaskovic
  * Text Domain: wp-birdlife

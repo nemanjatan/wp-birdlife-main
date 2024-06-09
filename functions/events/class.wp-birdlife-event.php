@@ -241,7 +241,7 @@ if ( ! class_exists( 'WP_Birdlife_Event' ) ) {
                     var loadingTime = parseInt(document.getElementById("wp_birdlife_loading_time").value, 10);
                     if (isNaN(loadingTime) || loadingTime <= 0) {
                         console.log("Invalid loadingTime: " + loadingTime);
-                        return;
+                        loadingTime = 5;
                     }
                     var dividedByTen = loadingTime / 10;
                     document.getElementById("myProgress").style.display = "block";
