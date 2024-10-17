@@ -422,16 +422,16 @@ if ( ! class_exists( 'WP_Birdlife_Project' ) ) {
 		}
 
 		private function set_meta_keys( $item ): array {
-			$project_id                                         = $item['id'];
-			$wp_birdlife_project_pro_title_txt                  = $item['wp_birdlife_project_pro_title_txt'];
-			$wp_birdlife_project_pro_description_clb            = $item['wp_birdlife_project_pro_description_clb'];
-			$wp_birdlife_project_pro_contact_detail_txt         = $item['wp_birdlife_project_pro_contact_detail_txt'];
-			$wp_birdlife_project_pro_place_txt                  = $item['wp_birdlife_project_pro_place_txt'];
-			$wp_birdlife_project_pro_date_from_dat              = $item['wp_birdlife_project_pro_date_from_dat'];
-			$wp_birdlife_project_pro_date_to_dat                = $item['wp_birdlife_project_pro_date_to_dat'];
-			$wp_birdlife_project_pro_key_words_grp              = $item['wp_birdlife_project_pro_key_words_grp'];
-			$wp_birdlife_project_featured_image                 = $item['wp_birdlife_project_featured_image'];
-			$wp_birdlife_project_featured_image_photocredit_txt = $item['wp_birdlife_project_featured_image_photocredit_txt'];
+			$project_id                                 = $item['id'];
+			$wp_birdlife_project_pro_title_txt          = $item['wp_birdlife_project_pro_title_txt'];
+			$wp_birdlife_project_pro_description_clb    = $item['wp_birdlife_project_pro_description_clb'];
+			$wp_birdlife_project_pro_contact_detail_txt = $item['wp_birdlife_project_pro_contact_detail_txt'];
+			$wp_birdlife_project_pro_place_txt          = $item['wp_birdlife_project_pro_place_txt'];
+			$wp_birdlife_project_pro_date_from_dat      = $item['wp_birdlife_project_pro_date_from_dat'];
+			$wp_birdlife_project_pro_date_to_dat        = $item['wp_birdlife_project_pro_date_to_dat'];
+			$wp_birdlife_project_pro_key_words_grp      = $item['wp_birdlife_project_pro_key_words_grp'];
+			$wp_birdlife_project_featured_image         = $item['wp_birdlife_project_featured_image'];
+			$wp_birdlife_project_featured_image_photocredit_txt         = $item['wp_birdlife_project_featured_image_photocredit_txt'];
 
 			$wp_birdlife_project_pro_status_current_voc = $item['wp_birdlife_project_pro_status_current_voc'];
 			$wp_birdlife_project_fachthemen             = $item['wp_birdlife_project_fachthemen'];
@@ -450,9 +450,9 @@ if ( ! class_exists( 'WP_Birdlife_Project' ) ) {
 				$meta_inputs['wp_birdlife_project_featured_image_exists'] = 'no';
 			}
 
-			if ( ! empty( $wp_birdlife_project_featured_image_photocredit_txt ) ) {
-				$meta_inputs['wp_birdlife_project_featured_image_photocredit_txt'] = $wp_birdlife_project_featured_image_photocredit_txt;
-			}
+            if ( ! empty( $wp_birdlife_project_featured_image_photocredit_txt ) ) {
+                $meta_inputs['wp_birdlife_project_featured_image_photocredit_txt'] = $wp_birdlife_project_featured_image_photocredit_txt;
+            }
 
 			if ( ! empty( $wp_birdlife_project_pro_description_clb ) ) {
 				$meta_inputs['wp_birdlife_project_pro_description_clb'] = $wp_birdlife_project_pro_description_clb;
@@ -502,56 +502,56 @@ if ( ! class_exists( 'WP_Birdlife_Project' ) ) {
 
 		public function hard_refresh_ajax_script() {
 			?>
-        <script type="text/javascript">
-            jQuery(document).ready(function ($) {
+            <script type="text/javascript">
+                jQuery(document).ready(function ($) {
 
-                $('#projects-hard-refresh-wp-ajax-button').click(function () {
-                    var id = $('#projects-hard-refresh-ajax-option-id').val();
-                    $.ajax({
-                        method: "POST",
-                        url: ajaxurl,
-                        data: {'action': 'projects_hard_refresh_action', 'id': id}
-                    })
-                        .done(function () {
-                            console.log('Successful Projects AJAX Call! /// Return Data: success');
-                            document.getElementById("myBar").style.display = 'none';
-                            var tag = document.createElement("p");
-                            tag.style.textAlign = 'center';
-
-                            var text = document.createTextNode("Done!");
-                            tag.appendChild(text);
-
-                            var element = document.getElementById("myProgress");
-                            element.appendChild(tag);
+                    $('#projects-hard-refresh-wp-ajax-button').click(function () {
+                        var id = $('#projects-hard-refresh-ajax-option-id').val();
+                        $.ajax({
+                            method: "POST",
+                            url: ajaxurl,
+                            data: {'action': 'projects_hard_refresh_action', 'id': id}
                         })
-                        .fail(function (data) {
-                            console.log('Failed AJAX Call :( /// Return Data: ' + data);
-                        });
+                            .done(function () {
+                                console.log('Successful Projects AJAX Call! /// Return Data: success');
+                                document.getElementById("myBar").style.display = 'none';
+                                var tag = document.createElement("p");
+                                tag.style.textAlign = 'center';
 
-                    var loadingTime = document.getElementById("wp_birdlife_projects_loading_time").value;
-                    var dividedByTen = loadingTime / 10;
-                    document.getElementById("myProgress").style.display = "block";
+                                var text = document.createTextNode("Done!");
+                                tag.appendChild(text);
 
-                    for (var y = 0; y < dividedByTen - 1; y++) {
-                        (function (x) {
-                            setTimeout(function () {
-                                console.log(x);
-                                var elem = document.getElementById("myBar");
-                                var width = (100 * x) / dividedByTen;
-                                if (width >= 100) {
-                                    clearInterval(id);
-                                    i = 0;
-                                } else {
-                                    width++;
-                                    elem.style.width = width + "%";
-                                }
-                            }, x * 10000);
-                        })(y);
-                    }
+                                var element = document.getElementById("myProgress");
+                                element.appendChild(tag);
+                            })
+                            .fail(function (data) {
+                                console.log('Failed AJAX Call :( /// Return Data: ' + data);
+                            });
+
+                        var loadingTime = document.getElementById("wp_birdlife_projects_loading_time").value;
+                        var dividedByTen = loadingTime / 10;
+                        document.getElementById("myProgress").style.display = "block";
+
+                        for (var y = 0; y < dividedByTen - 1; y++) {
+                            (function (x) {
+                                setTimeout(function () {
+                                    console.log(x);
+                                    var elem = document.getElementById("myBar");
+                                    var width = (100 * x) / dividedByTen;
+                                    if (width >= 100) {
+                                        clearInterval(id);
+                                        i = 0;
+                                    } else {
+                                        width++;
+                                        elem.style.width = width + "%";
+                                    }
+                                }, x * 10000);
+                            })(y);
+                        }
+                    });
+
                 });
-
-            });
-        </script>
+            </script>
 			<?php
 		}
 

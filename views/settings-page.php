@@ -20,20 +20,18 @@
 	} else {
 		$wp_birdlife_loading_time = get_option( 'wp_birdlife_loading_time' );
 		if ( $wp_birdlife_loading_time !== null ) {
-			echo '<input type="hidden" id="wp_birdlife_loading_time" value="' . esc_attr( $wp_birdlife_loading_time ) . '" />';
+			echo '<input type="hidden" id="wp_birdlife_loading_time" value="' . $wp_birdlife_loading_time . '" />';
 		}
 
 		$wp_birdlife_total_size_of_events = get_option( 'wp_birdlife_total_size_of_events' );
 		if ( $wp_birdlife_total_size_of_events !== null ) {
-			echo '<input type="hidden" id="wp_birdlife_total_size_of_events" value="' . esc_attr( $wp_birdlife_total_size_of_events ) . '" />';
+			echo '<input type="hidden" id="wp_birdlife_total_size_of_events" value="' . $wp_birdlife_total_size_of_events . '" />';
 		}
-
-		echo '<div id="myProgress" style="width: 100%; background-color: #f0f0f1; border: 1px solid #c3c4c7; margin: 5px; display: none;">
-                <div id="myBar" style="width: 0%; height: 30px; background-color: #59981A;"></div>
-              </div>';
-		echo '<div class="wrap">
-                <button id="hard-refresh-wp-ajax-button" class="button button-primary">Sync</button>
-              </div>';
+		echo '<div id="myProgress" style="width: 100%; background-color: #f0f0f1; border: 1px solid #c3c4c7; margin: 5px; display: none;"> <div id="myBar" style="width: 0%; height: 30px; background-color: #59981A;"> </div> </div>';
+		$html = '<div class="wrap">';
+		$html .= '<button id="hard-refresh-wp-ajax-button" class="button button-primary">Sync</button>';
+		$html .= '</div>';
+		echo $html;
 	}
 	?>
 </div>

@@ -5,168 +5,189 @@ if ( ! class_exists( 'WP_Birdlife_Settings' ) ) {
 		public static $options;
 		public static $options_for_projects;
 
-		const OPTION_GROUP = 'wp_birdlife_group';
-		const OPTION_NAME = 'wp_birdlife_options';
-		const OPTION_PROJECTS_NAME = 'wp_birdlife_options_for_projects';
-		const PAGE1 = 'wp_birdlife_page1';
-		const PAGE2 = 'wp_birdlife_page2';
-		const PAGE3 = 'wp_birdlife_page3';
-
 		public function __construct() {
-			self::$options              = get_option( self::OPTION_NAME );
-			self::$options_for_projects = get_option( self::OPTION_PROJECTS_NAME );
+			self::$options              = get_option( 'wp_birdlife_options' );
+			self::$options_for_projects = get_option( 'wp_birdlife_options_for_projects' );
 			add_action( 'admin_init', array( $this, 'admin_init' ) );
 		}
 
 		public function admin_init() {
-			$this->register_settings();
-			$this->add_settings_sections();
-			$this->add_settings_fields();
-		}
-
-		private function register_settings() {
 			register_setting(
-				self::OPTION_GROUP,
-				self::OPTION_NAME,
-				array( $this, 'validate_settings' )
+				'wp_birdlife_group',
+				'wp_birdlife_options',
+				array( $this, 'wp_birdlife_validate' )
 			);
 
 			register_setting(
-				self::OPTION_GROUP,
-				self::OPTION_PROJECTS_NAME,
-				array( $this, 'validate_settings' )
+				'wp_birdlife_group',
+				'wp_birdlife_options_for_projects',
+				array( $this, 'wp_birdlife_validate' )
 			);
-		}
 
-		private function add_settings_sections() {
 			add_settings_section(
-				'main_section',
+				'wp_birdlife_main_section',
 				'Automatic sync',
 				null,
-				self::PAGE1
+				'wp_birdlife_page1'
 			);
 
 			add_settings_section(
-				'main_section_for_projects',
+				'wp_birdlife_main_section_for_projects',
 				'Automatic sync',
 				null,
-				self::PAGE3
+				'wp_birdlife_page3'
 			);
 
 			add_settings_section(
-				'secondary_section',
+				'wp_birdlife_secondary_section',
 				'Manual sync',
 				null,
-				self::PAGE2
+				'wp_birdlife_page2'
 			);
-		}
 
-		private function add_settings_fields() {
 			add_settings_field(
-				'cron_job_time',
+				'wp_birdlife_cron_job_time',
 				'How often you want BirdLife to sync with ManagePlus?',
-				array( $this, 'cron_job_time_callback' ),
-				self::PAGE1,
-				'main_section'
+				array( $this, 'wp_birdlife_cron_job_time_callback' ),
+				'wp_birdlife_page1',
+				'wp_birdlife_main_section'
 			);
 
 			add_settings_field(
-				'cron_job_time_for_projects',
+				'wp_birdlife_cron_job_time_for_projects',
 				'How often you want BirdLife Projects to sync with ManagePlus?',
-				array( $this, 'cron_job_time_for_projects_callback' ),
-				self::PAGE3,
-				'main_section_for_projects'
+				array( $this, 'wp_birdlife_cron_job_for_projects_time_callback' ),
+				'wp_birdlife_page3',
+				'wp_birdlife_main_section_for_projects'
 			);
 
 			add_settings_field(
-				'cron_job_last_update',
+				'wp_birdlife_cron_job_last_update',
 				'Last Automatic sync:',
-				array( $this, 'cron_job_last_update_callback' ),
-				self::PAGE1,
-				'main_section'
+				array( $this, 'wp_birdlife_cron_job_last_update_callback' ),
+				'wp_birdlife_page1',
+				'wp_birdlife_main_section'
 			);
 
 			add_settings_field(
-				'cron_job_last_manual_update',
+				'wp_birdlife_cron_job_last_manual_update',
 				'Last Manual sync:',
-				array( $this, 'cron_job_last_manual_update_callback' ),
-				self::PAGE1,
-				'main_section'
+				array( $this, 'wp_birdlife_cron_job_last_manual_update_callback' ),
+				'wp_birdlife_page1',
+				'wp_birdlife_main_section'
 			);
 
 			add_settings_field(
-				'cron_job_for_projects_last_update',
+				'wp_birdlife_cron_job_for_projects_last_update',
 				'Last synced:',
-				array( $this, 'cron_job_for_projects_last_update_callback' ),
-				self::PAGE3,
-				'main_section_for_projects'
+				array( $this, 'wp_birdlife_cron_job_for_projects_last_update_callback' ),
+				'wp_birdlife_page3',
+				'wp_birdlife_main_section_for_projects'
 			);
 		}
 
-		public function cron_job_time_callback() {
-			$this->render_select_field(
-				'wp_birdlife_cron_job_time',
-				self::$options['wp_birdlife_cron_job_time'],
-				array( 'Hourly', 'Daily' )
-			);
+		public function wp_birdlife_cron_job_time_callback() {
+			?>
+            <select
+                    id="wp_birdlife_cron_job_time"
+                    name="wp_birdlife_options[wp_birdlife_cron_job_time]">
+                <option value="Hourly"
+					<?php isset( self::$options['wp_birdlife_cron_job_time'] ) ? selected( 'Hourly', self::$options['wp_birdlife_cron_job_time'], true ) : ''; ?>>
+                    Hourly
+                </option>
+                <option value="Daily"
+					<?php isset( self::$options['wp_birdlife_cron_job_time'] ) ? selected( 'Daily', self::$options['wp_birdlife_cron_job_time'], true ) : ''; ?>>
+                    Daily
+                </option>
+            </select>
 
-			$this->render_select_field(
-				'wp_birdlife_cron_job_time_for_projects',
-				self::$options_for_projects['wp_birdlife_cron_job_time_for_projects'],
-				array( 'Weekly', 'Monthly' ),
-				array( 'style' => 'display: none;' )
-			);
+            <select
+                    id="wp_birdlife_cron_job_time_for_projects"
+                    name="wp_birdlife_options_for_projects[wp_birdlife_cron_job_time_for_projects]"
+                    style="display: none;">
+                <option value="Weekly"
+					<?php isset( self::$options_for_projects['wp_birdlife_cron_job_time_for_projects'] ) ? selected( 'Weekly', self::$options_for_projects['wp_birdlife_cron_job_time_for_projects'], true ) : ''; ?>>
+                    Weekly
+                </option>
+                <option value="Monthly"
+					<?php isset( self::$options_for_projects['wp_birdlife_cron_job_time_for_projects'] ) ? selected( 'Monthly', self::$options_for_projects['wp_birdlife_cron_job_time_for_projects'], true ) : ''; ?>>
+                    Monthly
+                </option>
+            </select>
+			<?php
 		}
 
-		public function cron_job_time_for_projects_callback() {
-			$this->render_select_field(
-				'wp_birdlife_cron_job_time',
-				self::$options['wp_birdlife_cron_job_time'],
-				array( 'Hourly', 'Daily' ),
-				array( 'style' => 'display: none;' )
-			);
+		public function wp_birdlife_cron_job_for_projects_time_callback() {
+			?>
+            <select
+                    id="wp_birdlife_cron_job_time"
+                    name="wp_birdlife_options[wp_birdlife_cron_job_time]"
+                    style="display: none;">
+                <option value="Hourly"
+					<?php isset( self::$options['wp_birdlife_cron_job_time'] ) ? selected( 'Hourly', self::$options['wp_birdlife_cron_job_time'], true ) : ''; ?>>
+                    Hourly
+                </option>
+                <option value="Daily"
+					<?php isset( self::$options['wp_birdlife_cron_job_time'] ) ? selected( 'Daily', self::$options['wp_birdlife_cron_job_time'], true ) : ''; ?>>
+                    Daily
+                </option>
+            </select>
 
-			$this->render_select_field(
-				'wp_birdlife_cron_job_time_for_projects',
-				self::$options_for_projects['wp_birdlife_cron_job_time_for_projects'],
-				array( 'Weekly', 'Monthly' )
-			);
+            <select
+                    id="wp_birdlife_cron_job_time_for_projects"
+                    name="wp_birdlife_options_for_projects[wp_birdlife_cron_job_time_for_projects]">
+                <option value="Weekly"
+					<?php isset( self::$options_for_projects['wp_birdlife_cron_job_time_for_projects'] ) ? selected( 'Weekly', self::$options_for_projects['wp_birdlife_cron_job_time_for_projects'], true ) : ''; ?>>
+                    Weekly
+                </option>
+                <option value="Monthly"
+					<?php isset( self::$options_for_projects['wp_birdlife_cron_job_time_for_projects'] ) ? selected( 'Monthly', self::$options_for_projects['wp_birdlife_cron_job_time_for_projects'], true ) : ''; ?>>
+                    Monthly
+                </option>
+            </select>
+			<?php
 		}
 
-		private function render_select_field( $name, $selected_value, $options, $attributes = array() ) {
-			$attrs = '';
-			foreach ( $attributes as $key => $value ) {
-				$attrs .= sprintf( ' %s="%s"', $key, esc_attr( $value ) );
-			}
-
-			echo '<select id="' . esc_attr( $name ) . '" name="wp_birdlife_options[' . esc_attr( $name ) . ']"' . $attrs . '>';
-			foreach ( $options as $option ) {
-				$selected = selected( $option, $selected_value, false );
-				echo sprintf( '<option value="%s" %s>%s</option>', esc_attr( $option ), $selected, esc_html( $option ) );
-			}
-			echo '</select>';
+		public function wp_birdlife_cron_job_last_update_callback() {
+			?>
+            <p>
+				<?php
+				$wp_birdlife_last_sync = get_option( 'wp_birdlife_last_sync' );
+				if ( $wp_birdlife_last_sync !== null ) {
+					echo gmdate( 'd. M Y H:i:s', $wp_birdlife_last_sync + 3600 * ( 1 + (int) date( "I" ) ) );
+				}
+				?>
+            </p>
+			<?php
 		}
 
-		public function cron_job_last_update_callback() {
-			$this->render_last_sync_time( 'wp_birdlife_last_sync' );
+		public function wp_birdlife_cron_job_last_manual_update_callback() {
+			?>
+            <p>
+				<?php
+				$wp_birdlife_last_sync = get_option( 'wp_birdlife_last_manual_sync' );
+				if ( $wp_birdlife_last_sync !== null ) {
+					echo gmdate( 'd. M Y H:i:s', $wp_birdlife_last_sync + 3600 * ( 1 + (int) date( "I" ) ) );
+				}
+				?>
+            </p>
+			<?php
 		}
 
-		public function cron_job_last_manual_update_callback() {
-			$this->render_last_sync_time( 'wp_birdlife_last_manual_sync' );
+		public function wp_birdlife_cron_job_for_projects_last_update_callback() {
+			?>
+            <p>
+				<?php
+				$wp_birdlife_last_sync = get_option( 'wp_birdlife_last_sync_for_projects' );
+				if ( $wp_birdlife_last_sync !== null ) {
+					echo gmdate( 'd. M Y H:i:s', $wp_birdlife_last_sync + 3600 * ( 1 + (int) date( "I" ) ) );
+				}
+				?>
+            </p>
+			<?php
 		}
 
-		public function cron_job_for_projects_last_update_callback() {
-			$this->render_last_sync_time( 'wp_birdlife_last_sync_for_projects' );
-		}
-
-		private function render_last_sync_time( $option_name ) {
-			$last_sync = get_option( $option_name );
-			if ( $last_sync !== null ) {
-				echo '<p>' . gmdate( 'd. M Y H:i:s', $last_sync + 3600 * ( 1 + (int) date( "I" ) ) ) . '</p>';
-			}
-		}
-
-		public function validate_settings( $input ) {
+		public function wp_birdlife_validate( $input ) {
 			$new_input = array();
 			foreach ( $input as $key => $value ) {
 				$new_input[ $key ] = sanitize_text_field( $value );
@@ -176,4 +197,3 @@ if ( ! class_exists( 'WP_Birdlife_Settings' ) ) {
 		}
 	}
 }
-?>
