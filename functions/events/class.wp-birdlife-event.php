@@ -323,7 +323,7 @@ if ( ! class_exists( 'WP_Birdlife_Event' ) ) {
 		}
 
 		private function get_event_search_url() {
-			return 'https://de1.zetcom-group.de/MpWeb-maZurichBirdlife/ria-ws/application/module/Event/search/';
+			return 'https://maBirdlife.zetcom.app/ria-ws/application/module/Event/search/';
 		}
 
 		private function get_naturkurs_post_by_event_id( $event_id ) {
