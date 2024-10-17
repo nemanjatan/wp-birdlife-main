@@ -3,7 +3,7 @@
 if ( ! class_exists( 'WP_Birdlife_Reserved_Tn' ) ) {
 	class WP_Birdlife_Reserved_Tn {
 		private function get_booking_search_url() {
-			return 'https://de1.zetcom-group.de/MpWeb-maZurichBirdlife/ria-ws/application/module/Booking/search/';
+			return 'https://maBirdlife.zetcom.app/ria-ws/application/module/Booking/search/';
 		}
 
 		private function get_number_of_events( $helper, $url, $xml ) {

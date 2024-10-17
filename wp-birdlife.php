@@ -111,7 +111,7 @@ if ( ! class_exists( 'WP_Birdlife' ) ) {
 					</div>
 					<?php
 				} else {
-					$url = 'https://de1.zetcom-group.de/MpWeb-maZurichBirdlife/ria-ws/application/module/Booking';
+					$url = 'https://maBirdlife.zetcom.app/ria-ws/application/module/Booking';
 					list(
 						$second_person_exists,
 						$xml,

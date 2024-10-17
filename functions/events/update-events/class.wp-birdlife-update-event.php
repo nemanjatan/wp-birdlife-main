@@ -76,7 +76,7 @@ if ( ! class_exists( 'WP_Birdlife_Update_Event' ) ) {
 						$xml            = str_replace( "{{project_id}}", $module_item_id, $xml );
 						$args           = $helper->get_manage_plus_api_args( $xml );
 
-						$resp      = wp_remote_post( 'https://de1.zetcom-group.de/MpWeb-maZurichBirdlife/ria-ws/application/module/Project/search/', $args );
+						$resp      = wp_remote_post( 'https://maBirdlife.zetcom.app/ria-ws/application/module/Project/search/', $args );
 						$resp_body = $resp['body'];
 
 						$parsed_xml  = simplexml_load_string( $resp_body );
@@ -164,7 +164,7 @@ if ( ! class_exists( 'WP_Birdlife_Update_Event' ) ) {
 								$xml  = str_replace( "{{project_id}}", $module_item_id, $xml );
 								$args = $helper->get_manage_plus_api_args( $xml );
 
-								$resp      = wp_remote_post( 'https://de1.zetcom-group.de/MpWeb-maZurichBirdlife/ria-ws/application/module/Project/search/', $args );
+								$resp      = wp_remote_post( 'https://maBirdlife.zetcom.app/ria-ws/application/module/Project/search/', $args );
 								$resp_body = $resp['body'];
 
 								$parsed_xml  = simplexml_load_string( $resp_body );
@@ -601,7 +601,7 @@ if ( ! class_exists( 'WP_Birdlife_Update_Event' ) ) {
 						$wp_birdlife_event_category_voc = $module_item['vocabularyReference']['vocabularyReferenceItem']['@attributes']['id'];
 						if ( $wp_birdlife_event_category_voc !== null ) {
 							$vocabulary_args = $helper->get_manage_plus_api_args_no_body();
-							$vocabulary_resp = wp_remote_get( 'https://de1.zetcom-group.de/MpWeb-maZurichBirdlife/ria-ws/application/vocabulary/instances/EvtCategoryVgr/nodes/' . $wp_birdlife_event_category_voc . '/parents', $vocabulary_args );
+							$vocabulary_resp = wp_remote_get( 'https://maBirdlife.zetcom.app/ria-ws/application/vocabulary/instances/EvtCategoryVgr/nodes/' . $wp_birdlife_event_category_voc . '/parents', $vocabulary_args );
 
 							$xml       = simplexml_load_string( $vocabulary_resp['body'] );
 							$namespace = $xml->getNamespaces( true );
@@ -684,7 +684,7 @@ if ( ! class_exists( 'WP_Birdlife_Update_Event' ) ) {
 
 								if ( $wp_birdlife_event_category_voc !== null ) {
 									$vocabulary_args = $helper->get_manage_plus_api_args_no_body();
-									$vocabulary_resp = wp_remote_get( 'https://de1.zetcom-group.de/MpWeb-maZurichBirdlife/ria-ws/application/vocabulary/instances/EvtCategoryVgr/nodes/' . $wp_birdlife_event_category_voc . '/parents', $vocabulary_args );
+									$vocabulary_resp = wp_remote_get( 'https://maBirdlife.zetcom.app/ria-ws/application/vocabulary/instances/EvtCategoryVgr/nodes/' . $wp_birdlife_event_category_voc . '/parents', $vocabulary_args );
 
 									$xml       = simplexml_load_string( $vocabulary_resp['body'] );
 									$namespace = $xml->getNamespaces( true );
