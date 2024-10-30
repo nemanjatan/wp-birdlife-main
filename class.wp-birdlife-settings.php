@@ -63,8 +63,16 @@
         
         add_settings_field(
           'wp_birdlife_cron_job_last_update',
-          'Last synced:',
+          'Last Automatic sync:',
           array( $this, 'wp_birdlife_cron_job_last_update_callback' ),
+          'wp_birdlife_page1',
+          'wp_birdlife_main_section'
+        );
+        
+        add_settings_field(
+          'wp_birdlife_cron_job_last_manual_update',
+          'Last Manual sync:',
+          array( $this, 'wp_birdlife_cron_job_last_manual_update_callback' ),
           'wp_birdlife_page1',
           'wp_birdlife_main_section'
         );
@@ -145,6 +153,19 @@
           <p>
             <?php
               $wp_birdlife_last_sync = get_option( 'wp_birdlife_last_sync' );
+              if ( $wp_birdlife_last_sync !== null ) {
+                echo gmdate( 'd. M Y H:i:s', $wp_birdlife_last_sync + 3600 * ( 1 + (int) date( "I" ) ) );
+              }
+            ?>
+          </p>
+        <?php
+      }
+      
+      public function wp_birdlife_cron_job_last_manual_update_callback() {
+        ?>
+          <p>
+            <?php
+              $wp_birdlife_last_sync = get_option( 'wp_birdlife_last_manual_sync' );
               if ( $wp_birdlife_last_sync !== null ) {
                 echo gmdate( 'd. M Y H:i:s', $wp_birdlife_last_sync + 3600 * ( 1 + (int) date( "I" ) ) );
               }

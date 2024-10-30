@@ -46,6 +46,10 @@
   $event_neues_feld               = get_post_meta( $post_id, 'wp_birdlife_event_neues_feld', true );
   $event_status                   = get_post_meta( $post_id, 'wp_birdlife_event_status', true );
   $event_currency_voc             = get_post_meta( $post_id, 'wp_birdlife_event_currency_voc', true );
+  $event_project_ref              = get_post_meta( $post_id, 'wp_birdlife_event_project_ref', true );
+  $event_type_voc                 = get_post_meta( $post_id, 'wp_birdlife_event_type_voc', true );
+  $event_category_voc             = get_post_meta( $post_id, 'wp_birdlife_event_category_voc', true );
+  $event_category_voc_parent      = get_post_meta( $post_id, 'wp_birdlife_event_category_voc_parent', true );
 ?>
 
 <table class="form-table wp-birdlife-metabox" style="border: 1px solid">
@@ -61,7 +65,8 @@
             </p>
         </td style="border: 1px solid">
         <td>
-            <p id="manage_plus_event_id"><?php echo ( isset ( $manage_plus_event_id ) ) ? esc_textarea( $manage_plus_event_id ) : ''; ?></p>
+            <p
+                    id="manage_plus_event_id"><?php echo ( isset ( $manage_plus_event_id ) ) ? esc_textarea( $manage_plus_event_id ) : ''; ?></p>
         </td>
     </tr>
     </hr>
@@ -156,7 +161,8 @@
             </p>
         </td>
         <td style="border: 1px solid">
-            <p id="wp_birdlife_event_credits"><?php echo ( isset ( $event_credits ) ) ? esc_attr( $event_credits ) : ''; ?></p>
+            <p
+                    id="wp_birdlife_event_credits"><?php echo ( isset ( $event_credits ) ) ? esc_attr( $event_credits ) : ''; ?></p>
         </td>
     </tr>
     <tr>
@@ -166,7 +172,8 @@
             </p>
         </td>
         <td style="border: 1px solid">
-            <p id="wp_birdlife_event_online_date"><?php echo ( isset ( $event_online_date ) ) ? esc_attr( $event_online_date ) : ''; ?></p>
+            <p
+                    id="wp_birdlife_event_online_date"><?php echo ( isset ( $event_online_date ) ) ? esc_attr( $event_online_date ) : ''; ?></p>
         </td>
     </tr>
     <tr>
@@ -176,7 +183,8 @@
             </p>
         </td>
         <td style="border: 1px solid">
-            <p id="wp_birdlife_event_num_min_lnu"><?php echo ( isset ( $event_num_min_lnu ) ) ? esc_attr( $event_num_min_lnu ) : ''; ?></p>
+            <p
+                    id="wp_birdlife_event_num_min_lnu"><?php echo ( isset ( $event_num_min_lnu ) ) ? esc_attr( $event_num_min_lnu ) : ''; ?></p>
         </td>
     </tr>
     <tr>
@@ -186,7 +194,8 @@
             </p>
         </td>
         <td style="border: 1px solid">
-            <p id="wp_birdlife_event_num_max_lnu"><?php echo ( isset ( $event_num_max_lnu ) ) ? esc_attr( $event_num_max_lnu ) : ''; ?></p>
+            <p
+                    id="wp_birdlife_event_num_max_lnu"><?php echo ( isset ( $event_num_max_lnu ) ) ? esc_attr( $event_num_max_lnu ) : ''; ?></p>
         </td>
     </tr>
     <tr>
@@ -196,7 +205,8 @@
             </p>
         </td>
         <td style="border: 1px solid">
-            <p id="wp_birdlife_event_course_description_short"><?php echo ( isset ( $event_course_description_short ) ) ? esc_attr( $event_course_description_short ) : ''; ?></p>
+            <p
+                    id="wp_birdlife_event_course_description_short"><?php echo ( isset ( $event_course_description_short ) ) ? esc_attr( $event_course_description_short ) : ''; ?></p>
         </td>
     </tr>
     <tr>
@@ -216,7 +226,8 @@
             </p>
         </td>
         <td style="border: 1px solid">
-            <p id="wp_birdlife_event_course_multiple_events"><?php echo ( isset ( $event_course_multiple_events ) ) ? esc_attr( $event_course_multiple_events ) : ''; ?></p>
+            <p
+                    id="wp_birdlife_event_course_multiple_events"><?php echo ( isset ( $event_course_multiple_events ) ) ? esc_attr( $event_course_multiple_events ) : ''; ?></p>
         </td>
     </tr>
     <tr>
@@ -226,7 +237,8 @@
             </p>
         </td>
         <td style="border: 1px solid">
-            <p id="wp_birdlife_event_program"><?php echo ( isset ( $event_program ) ) ? esc_attr( $event_program ) : ''; ?></p>
+            <p
+                    id="wp_birdlife_event_program"><?php echo ( isset ( $event_program ) ) ? esc_attr( $event_program ) : ''; ?></p>
         </td>
     </tr>
     <tr>
@@ -236,7 +248,8 @@
             </p>
         </td>
         <td style="border: 1px solid">
-            <p id="wp_birdlife_event_time_to_tim"><?php echo ( isset ( $event_time_to_tim ) ) ? esc_attr( $event_time_to_tim ) : ''; ?></p>
+            <p
+                    id="wp_birdlife_event_time_to_tim"><?php echo ( isset ( $event_time_to_tim ) ) ? esc_attr( $event_time_to_tim ) : ''; ?></p>
         </td>
     </tr>
     <tr>
@@ -246,7 +259,8 @@
             </p>
         </td>
         <td style="border: 1px solid">
-            <p id="wp_birdlife_event_overnight_place"><?php echo ( isset ( $event_overnight_place ) ) ? esc_attr( $event_overnight_place ) : ''; ?></p>
+            <p
+                    id="wp_birdlife_event_overnight_place"><?php echo ( isset ( $event_overnight_place ) ) ? esc_attr( $event_overnight_place ) : ''; ?></p>
         </td>
     </tr>
     <tr>
@@ -256,7 +270,8 @@
             </p>
         </td>
         <td style="border: 1px solid">
-            <p id="wp_birdlife_event_time_from_tim"><?php echo ( isset ( $event_time_from_tim ) ) ? esc_attr( $event_time_from_tim ) : ''; ?></p>
+            <p
+                    id="wp_birdlife_event_time_from_tim"><?php echo ( isset ( $event_time_from_tim ) ) ? esc_attr( $event_time_from_tim ) : ''; ?></p>
         </td>
     </tr>
     <tr>
@@ -266,7 +281,8 @@
             </p>
         </td>
         <td style="border: 1px solid">
-            <p id="wp_birdlife_event_materials"><?php echo ( isset ( $event_materials ) ) ? esc_attr( $event_materials ) : ''; ?></p>
+            <p
+                    id="wp_birdlife_event_materials"><?php echo ( isset ( $event_materials ) ) ? esc_attr( $event_materials ) : ''; ?></p>
         </td>
     </tr>
     <tr>
@@ -276,7 +292,8 @@
             </p>
         </td>
         <td style="border: 1px solid">
-            <p id="wp_birdlife_event_boking_template_id_lnu"><?php echo ( isset ( $event_boking_template_id_lnu ) ) ? esc_textarea( $event_boking_template_id_lnu ) : ''; ?></p>
+            <p
+                    id="wp_birdlife_event_boking_template_id_lnu"><?php echo ( isset ( $event_boking_template_id_lnu ) ) ? esc_textarea( $event_boking_template_id_lnu ) : ''; ?></p>
         </td>
     </tr>
     <tr>
@@ -286,7 +303,8 @@
             </p>
         </td>
         <td style="border: 1px solid">
-            <p id="wp_birdlife_event_approved_notes"><?php echo ( isset ( $event_approved_notes ) ) ? esc_attr( $event_approved_notes ) : ''; ?></p>
+            <p
+                    id="wp_birdlife_event_approved_notes"><?php echo ( isset ( $event_approved_notes ) ) ? esc_attr( $event_approved_notes ) : ''; ?></p>
         </td>
     </tr>
     <tr>
@@ -296,7 +314,8 @@
             </p>
         </td>
         <td style="border: 1px solid">
-            <p id="wp_birdlife_event_approved_text"><?php echo ( isset ( $event_approved_text ) ) ? esc_attr( $event_approved_text ) : ''; ?></p>
+            <p
+                    id="wp_birdlife_event_approved_text"><?php echo ( isset ( $event_approved_text ) ) ? esc_attr( $event_approved_text ) : ''; ?></p>
         </td>
     </tr>
     <tr>
@@ -306,7 +325,8 @@
             </p>
         </td>
         <td style="border: 1px solid">
-            <p id="wp_birdlife_event_approved_decision_date"><?php echo ( isset ( $event_approved_decision_date ) ) ? esc_attr( $event_approved_decision_date ) : ''; ?></p>
+            <p
+                    id="wp_birdlife_event_approved_decision_date"><?php echo ( isset ( $event_approved_decision_date ) ) ? esc_attr( $event_approved_decision_date ) : ''; ?></p>
         </td>
     </tr>
     <tr>
@@ -316,7 +336,8 @@
             </p>
         </td>
         <td style="border: 1px solid">
-            <p id="wp_birdlife_event_approved_date"><?php echo ( isset ( $event_approved_date ) ) ? esc_attr( $event_approved_date ) : ''; ?></p>
+            <p
+                    id="wp_birdlife_event_approved_date"><?php echo ( isset ( $event_approved_date ) ) ? esc_attr( $event_approved_date ) : ''; ?></p>
         </td>
     </tr>
     <tr>
@@ -336,7 +357,8 @@
             </p>
         </td>
         <td style="border: 1px solid">
-            <p id="wp_birdlife_event_description"><?php echo ( isset ( $event_description ) ) ? esc_attr( $event_description ) : ''; ?></p>
+            <p
+                    id="wp_birdlife_event_description"><?php echo ( isset ( $event_description ) ) ? esc_attr( $event_description ) : ''; ?></p>
         </td>
     </tr>
     <tr>
@@ -346,7 +368,8 @@
             </p>
         </td>
         <td style="border: 1px solid">
-            <p id="wp_birdlife_event_date_to_dat"><?php echo ( isset ( $event_date_to_dat ) ) ? esc_attr( $event_date_to_dat ) : ''; ?></p>
+            <p
+                    id="wp_birdlife_event_date_to_dat"><?php echo ( isset ( $event_date_to_dat ) ) ? esc_attr( $event_date_to_dat ) : ''; ?></p>
         </td>
     </tr>
     <tr>
@@ -356,7 +379,8 @@
             </p>
         </td>
         <td style="border: 1px solid">
-            <p id="wp_birdlife_event_date_from_dat"><?php echo ( isset ( $event_date_from_dat ) ) ? esc_attr( $event_date_from_dat ) : ''; ?></p>
+            <p
+                    id="wp_birdlife_event_date_from_dat"><?php echo ( isset ( $event_date_from_dat ) ) ? esc_attr( $event_date_from_dat ) : ''; ?></p>
         </td>
     </tr>
     <tr>
@@ -366,7 +390,8 @@
             </p>
         </td>
         <td style="border: 1px solid">
-            <p id="wp_birdlife_event_registration_start_dat"><?php echo ( isset ( $event_registration_start_dat ) ) ? esc_attr( $event_registration_start_dat ) : ''; ?></p>
+            <p
+                    id="wp_birdlife_event_registration_start_dat"><?php echo ( isset ( $event_registration_start_dat ) ) ? esc_attr( $event_registration_start_dat ) : ''; ?></p>
         </td>
     </tr>
     <tr>
@@ -406,7 +431,8 @@
             </p>
         </td>
         <td style="border: 1px solid">
-            <p id="wp_birdlife_event_number_participants"><?php echo ( isset ( $event_number_participants ) ) ? esc_attr( $event_number_participants ) : ''; ?></p>
+            <p
+                    id="wp_birdlife_event_number_participants"><?php echo ( isset ( $event_number_participants ) ) ? esc_attr( $event_number_participants ) : ''; ?></p>
         </td>
     </tr>
     <tr>
@@ -416,7 +442,8 @@
             </p>
         </td>
         <td style="border: 1px solid">
-            <p id="wp_birdlife_event_number_groups"><?php echo ( isset ( $event_number_groups ) ) ? esc_attr( $event_number_groups ) : ''; ?></p>
+            <p
+                    id="wp_birdlife_event_number_groups"><?php echo ( isset ( $event_number_groups ) ) ? esc_attr( $event_number_groups ) : ''; ?></p>
         </td>
     </tr>
     <tr>
@@ -436,7 +463,8 @@
             </p>
         </td>
         <td style="border: 1px solid">
-            <p id="wp_birdlife_event_course_description"><?php echo ( isset ( $event_course_description ) ) ? esc_attr( $event_course_description ) : ''; ?></p>
+            <p
+                    id="wp_birdlife_event_course_description"><?php echo ( isset ( $event_course_description ) ) ? esc_attr( $event_course_description ) : ''; ?></p>
         </td>
     </tr>
     <tr>
@@ -446,7 +474,8 @@
             </p>
         </td>
         <td style="border: 1px solid">
-            <p id="wp_birdlife_event_organizer"><?php echo ( isset ( $event_organizer ) ) ? esc_attr( $event_organizer ) : ''; ?></p>
+            <p
+                    id="wp_birdlife_event_organizer"><?php echo ( isset ( $event_organizer ) ) ? esc_attr( $event_organizer ) : ''; ?></p>
         </td>
     </tr>
     <tr>
@@ -456,7 +485,8 @@
             </p>
         </td>
         <td style="border: 1px solid">
-            <p id="wp_birdlife_event_course_costs"><?php echo ( isset ( $event_course_costs ) ) ? esc_attr( $event_course_costs ) : ''; ?></p>
+            <p
+                    id="wp_birdlife_event_course_costs"><?php echo ( isset ( $event_course_costs ) ) ? esc_attr( $event_course_costs ) : ''; ?></p>
         </td>
     </tr>
     <tr>
@@ -466,7 +496,8 @@
             </p>
         </td>
         <td style="border: 1px solid">
-            <p id="wp_birdlife_event_equipment"><?php echo ( isset ( $event_equipment ) ) ? esc_attr( $event_equipment ) : ''; ?></p>
+            <p
+                    id="wp_birdlife_event_equipment"><?php echo ( isset ( $event_equipment ) ) ? esc_attr( $event_equipment ) : ''; ?></p>
         </td>
     </tr>
     <tr>
@@ -476,7 +507,8 @@
             </p>
         </td>
         <td style="border: 1px solid">
-            <p id="wp_birdlife_event_course_additional"><?php echo ( isset ( $event_course_additional ) ) ? esc_attr( $event_course_additional ) : ''; ?></p>
+            <p
+                    id="wp_birdlife_event_course_additional"><?php echo ( isset ( $event_course_additional ) ) ? esc_attr( $event_course_additional ) : ''; ?></p>
         </td>
     </tr>
     <tr>
@@ -486,7 +518,8 @@
             </p>
         </td>
         <td style="border: 1px solid">
-            <p id="wp_birdlife_event_neues_feld"><?php echo ( isset ( $event_neues_feld ) ) ? esc_attr( $event_neues_feld ) : ''; ?></p>
+            <p
+                    id="wp_birdlife_event_neues_feld"><?php echo ( isset ( $event_neues_feld ) ) ? esc_attr( $event_neues_feld ) : ''; ?></p>
         </td>
     </tr>
     <tr>
@@ -496,7 +529,8 @@
             </p>
         </td>
         <td style="border: 1px solid">
-            <p id="wp_birdlife_event_id_num"><?php echo ( isset ( $event_id_num ) ) ? esc_textarea( $event_id_num ) : ''; ?></p>
+            <p
+                    id="wp_birdlife_event_id_num"><?php echo ( isset ( $event_id_num ) ) ? esc_textarea( $event_id_num ) : ''; ?></p>
         </td>
     </tr>
     <tr>
@@ -506,7 +540,8 @@
             </p>
         </td>
         <td style="border: 1px solid">
-            <p id="wp_birdlife_event_status"><?php echo ( isset ( $event_status ) ) ? esc_textarea( $event_status ) : ''; ?></p>
+            <p
+                    id="wp_birdlife_event_status"><?php echo ( isset ( $event_status ) ) ? esc_textarea( $event_status ) : ''; ?></p>
         </td>
     </tr>
     <tr>
@@ -516,7 +551,52 @@
             </p>
         </td>
         <td style="border: 1px solid">
-            <p id="wp_birdlife_event_status"><?php echo ( isset ( $event_currency_voc ) ) ? esc_textarea( $event_currency_voc ) : ''; ?></p>
+            <p
+                    id="wp_birdlife_event_status"><?php echo ( isset ( $event_currency_voc ) ) ? esc_textarea( $event_currency_voc ) : ''; ?></p>
+        </td>
+    </tr>
+    <tr>
+        <td style="border: 1px solid">
+            <p>
+                <b>EvtProjectRef</b>
+            </p>
+        </td>
+        <td style="border: 1px solid">
+            <p
+                    id="wp_birdlife_event_status"><?php echo ( isset ( $event_project_ref ) ) ? esc_textarea( $event_project_ref ) : ''; ?></p>
+        </td>
+    </tr>
+    <tr>
+        <td style="border: 1px solid">
+            <p>
+                <b>EvtTypeVoc</b>
+            </p>
+        </td>
+        <td style="border: 1px solid">
+            <p
+                    id="wp_birdlife_event_status"><?php echo ( isset ( $event_type_voc ) ) ? esc_textarea( $event_type_voc ) : ''; ?></p>
+        </td>
+    </tr>
+    <tr>
+        <td style="border: 1px solid">
+            <p>
+                <b>EvtCategoryVoc</b>
+            </p>
+        </td>
+        <td style="border: 1px solid">
+            <p
+                    id="wp_birdlife_event_status"><?php echo ( isset ( $event_category_voc ) ) ? esc_textarea( $event_category_voc ) : ''; ?></p>
+        </td>
+    </tr>
+    <tr>
+        <td style="border: 1px solid">
+            <p>
+                <b>EvtCategoryVoc (Parent)</b>
+            </p>
+        </td>
+        <td style="border: 1px solid">
+            <p
+                    id="wp_birdlife_event_status"><?php echo ( isset ( $event_category_voc_parent ) ) ? esc_textarea( $event_category_voc_parent ) : ''; ?></p>
         </td>
     </tr>
 </table>

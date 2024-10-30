@@ -74,7 +74,8 @@
             
             if ( empty( $posts ) ) {
               $post_status = 'publish';
-              if ( $meta_inputs['wp_birdlife_event_status'] === 'in Durchführung' ) {
+              if ( $meta_inputs['wp_birdlife_event_status'] === 'in Durchführung'
+                   || $meta_inputs['wp_birdlife_event_status'] === 'abgesagt' ) {
                 $post_status = 'draft';
               }
               
@@ -111,7 +112,8 @@
               
               foreach ( $posts as $post ) {
                 $post_status = 'publish';
-                if ( $meta_inputs['wp_birdlife_event_status'] === 'in Durchführung' ) {
+                if ( $meta_inputs['wp_birdlife_event_status'] === 'in Durchführung'
+                     || $meta_inputs['wp_birdlife_event_status'] === 'abgesagt' ) {
                   $post_status = 'draft';
                 }
                 
@@ -157,6 +159,7 @@
 //				}
 //			}
         
+        // todo remove after
         update_option( 'wp_birdlife_last_sync', time() );
       }
       
@@ -231,7 +234,6 @@
                 var id = $('#hard-refresh-ajax-option-id').val();
                 
                 var totalSizeOfEvents = document.getElementById("wp_birdlife_total_size_of_events").value;
-                
                 createOrUpdateEvents(0, totalSizeOfEvents);
                 
                 var loadingTime = document.getElementById("wp_birdlife_loading_time").value;
@@ -280,7 +282,9 @@
         $new_loading_time = $wp_birdlife_loading_time + floor( $execution_time );
         
         update_option( 'wp_birdlife_loading_time', $new_loading_time );
-        update_option( 'wp_birdlife_last_sync', time() );
+        // todo remove after
+        // update_option( 'wp_birdlife_last_sync', time() );
+        update_option( 'wp_birdlife_last_manual_sync', time() );
         
         $data = 'new loading time: ' . $new_loading_time;
         echo json_encode( $data );
@@ -319,7 +323,7 @@
       }
       
       private function get_event_search_url() {
-        return 'https://de1.zetcom-group.de/MpWeb-maZurichBirdlife/ria-ws/application/module/Event/search/';
+        return 'https://maBirdlife.zetcom.app/ria-ws/application/module/Event/search/';
       }
       
       private function get_naturkurs_post_by_event_id( $event_id ) {

@@ -80,6 +80,14 @@
         
         if ( isset( $_POST['submit'] ) and $_POST['action'] == 'anmelden' ) {
           $error = $this->checkBookingError();
+          
+          if ( wpa_check_is_spam( $_POST ) ) {
+            // do_action('wpa_handle_spammers','YOUR_CUSTOM_FORM_NAME', $_POST); // FOR RECORDING PURPOSE
+            // YOUR CODE TO BLOCK SUBMISSION
+            $error = "Not allowed!";
+            // return $GLOBALS['wpa_error_message']; // RETURNING ERROR MESSAGE
+          }
+          
           if ( $error !== '' ) {
             ?>
               <div class="fl-builder-content">
@@ -103,7 +111,7 @@
               </div>
             <?php
           } else {
-            $url = 'https://de1.zetcom-group.de/MpWeb-maZurichBirdlife/ria-ws/application/module/Booking';
+            $url = 'https://maBirdlife.zetcom.app/ria-ws/application/module/Booking';
             list(
               $second_person_exists,
               $xml,
@@ -118,7 +126,8 @@
               $city,
               $second_person_first_name,
               $second_person_last_name,
-              $gleiche_adresse_active ) = $WP_Birdlife_Book_Event->create_xml_body_request();
+              $gleiche_adresse_active,
+              $newsletter ) = $WP_Birdlife_Book_Event->create_xml_body_request();
             
             $args = $this->get_manage_plus_api_args( $xml );
             $resp = wp_remote_post( $url, $args );
@@ -137,7 +146,8 @@
                                             padding-left: 20px;
                                             padding-right: 20px;">
                                             <h2 style="color: #763c3c; line-height: 22px; text-align: center;">
-                                                Service unavailable</h2>
+                                                Im Moment ist keine Anmeldung möglich, bitte versuchen Sie es später
+                                                noch einmal</h2>
                                         </div>
                                     </div>
                                 </div>
@@ -158,14 +168,48 @@
               $post    = get_post( $post_id );
               $title   = isset( $post->post_title ) ? $post->post_title : '';
               
-              $to      = $first_person_email;
-              $subject = "Eingangsbestätigung Anmeldung, Kurse für Fortgeschrittene: " . $title;
-              if ( $gleiche_adresse_active ) {
-                $txt = "Guten Tag.<br><br>Folgende Anmeldung ist bei uns eingegangen: <br><br>Erste Person:<br>" . $first_name . " " . $last_name . ", " . $first_person_email . " <br>" . $street . " <br><br>" . $postal_code . " " . $city . "<br><br>Zweite Person:<br>" . $second_person_first_name . " " . $second_person_last_name . ", " . $second_person_email . "<br>" . $street . " <br><br>" . $postal_code . " " . $city . " <br><br>Sie werden in den nächsten Tagen von uns über den Stand Ihrer Anmeldung informiert. Sollten Sie Fragen haben, stehen wir Ihnen gerne per E-Mail an info@birdlife-zuerich.ch zur Verfügung.<br><br>Mit herzlichen Grüssen<br><br>Birdlife Zürich<br>Wiedingstrasse 78<br>8045 Zürich<br><br></br>info@birdlife-zuerich.ch<br>www.birdlife-zuerich.ch";
-              } else {
-                $txt = "Guten Tag.<br><br>Folgende Anmeldung ist bei uns eingegangen: <br><br>Erste Person:<br>" . $first_name . " " . $last_name . ", " . $first_person_email . " <br>" . $street . " <br><br>" . $postal_code . " " . $city . "<br><br>Zweite Person:<br>" . $second_person_first_name . " " . $second_person_last_name . ", " . $second_person_email . " <br><br>Sie werden in den nächsten Tagen von uns über den Stand Ihrer Anmeldung informiert. Sollten Sie Fragen haben, stehen wir Ihnen gerne per E-Mail an info@birdlife-zuerich.ch zur Verfügung.<br><br>Mit herzlichen Grüssen<br><br>Birdlife Zürich<br>Wiedingstrasse 78<br>8045 Zürich<br><br></br>info@birdlife-zuerich.ch<br>www.birdlife-zuerich.ch";
+              // --------------------------------------------------------------------------------------------
+              // --------------------------------------------------------------------------------------------
+              // --------------------------------------------------------------------------------------------
+              if ( $newsletter ) {
+                $url     = 'https://api.brevo.com/v3/contacts';
+                $apiKey  = BREVO_API_KEY;
+                $headers = [
+                  'accept: application/json',
+                  'content-type: application/json',
+                  "api-key: $apiKey"
+                ];
+                $data    = [
+                  'email'      => $first_person_email,
+                  'listIds'    => [ 2 ],
+                  'attributes' => [
+                    'NACHNAME' => $last_name,
+                    'NAME'     => $last_name,
+                    'VORNAME'  => $first_name
+                  ],
+                ];
+                
+                $ch = curl_init();
+                curl_setopt( $ch, CURLOPT_URL, $url );
+                curl_setopt( $ch, CURLOPT_POST, true );
+                curl_setopt( $ch, CURLOPT_HTTPHEADER, $headers );
+                curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
+                curl_setopt( $ch, CURLOPT_POSTFIELDS, json_encode( $data ) );
+                $response = curl_exec( $ch );
+                curl_close( $ch );
               }
-              $headers = "Content-Type: text/html; charset=UTF-8\r\nFrom: info@birdlife-zuerich.ch\r\nCc: info@birdlife-zuerich.ch";
+              // --------------------------------------------------------------------------------------------
+              // --------------------------------------------------------------------------------------------
+              // --------------------------------------------------------------------------------------------
+              
+              $to      = $first_person_email;
+              $subject = "Eingangsbestätigung Anmeldung: " . $title;
+              if ( $gleiche_adresse_active ) {
+                $txt = "Guten Tag.<br><br>Folgende Anmeldung ist bei uns eingegangen: <br><br>Erste Person:<br>" . $first_name . " " . $last_name . ", " . $first_person_email . " <br>" . $street . " <br><br>" . $postal_code . " " . $city . "<br><br>Zweite Person:<br>" . $second_person_first_name . " " . $second_person_last_name . ", " . $second_person_email . "<br>" . $street . " <br><br>" . $postal_code . " " . $city . " <br><br>Sie werden in den nächsten Tagen von uns über den Stand Ihrer Anmeldung informiert. Sollten Sie Fragen haben, stehen wir Ihnen gerne per E-Mail an kurse@birdlife-zuerich.ch zur Verfügung.<br><br>Mit herzlichen Grüssen<br><br>Birdlife Zürich<br>Wiedingstrasse 78<br>8045 Zürich<br><br></br>kurse@birdlife-zuerich.ch<br>www.birdlife-zuerich.ch";
+              } else {
+                $txt = "Guten Tag.<br><br>Folgende Anmeldung ist bei uns eingegangen: <br><br>Erste Person:<br>" . $first_name . " " . $last_name . ", " . $first_person_email . " <br>" . $street . " <br><br>" . $postal_code . " " . $city . "<br><br>Zweite Person:<br>" . $second_person_first_name . " " . $second_person_last_name . ", " . $second_person_email . " <br><br>Sie werden in den nächsten Tagen von uns über den Stand Ihrer Anmeldung informiert. Sollten Sie Fragen haben, stehen wir Ihnen gerne per E-Mail an kurse@birdlife-zuerich.ch zur Verfügung.<br><br>Mit herzlichen Grüssen<br><br>Birdlife Zürich<br>Wiedingstrasse 78<br>8045 Zürich<br><br></br>kurse@birdlife-zuerich.ch<br>www.birdlife-zuerich.ch";
+              }
+              $headers = "Content-Type: text/html; charset=UTF-8\r\nFrom: kurse@birdlife-zuerich.ch\r\nCc: kurse@birdlife-zuerich.ch";
               mail( $to, $subject, $txt, $headers );
               // end of send email to first person
               
@@ -187,7 +231,8 @@
                                             padding-left: 20px;
                                             padding-right: 20px;">
                                                 <h2 style="color: #763c3c; line-height: 22px; text-align: center;">
-                                                    Service unavailable</h2>
+                                                    Im Moment ist keine Anmeldung möglich, bitte versuchen Sie es später
+                                                    noch einmal</h2>
                                             </div>
                                         </div>
                                     </div>
@@ -202,9 +247,9 @@
                     $to = $second_person_email;
                     
                     if ( $gleiche_adresse_active ) {
-                      $txt = "Guten Tag.<br><br>Sie wurden von " . $first_name . " " . $last_name . ", " . $first_person_email . " für folgenden Kurs angemeldet:<br>" . $title . "<br><br>Angaben zu ihrer Person:<br>" . $second_person_first_name . " " . $second_person_last_name . "<br>" . $second_person_email . "<br>" . $street . " <br><br>" . $postal_code . " " . $city . "<br><br>Sie werden in den nächsten Tagen von uns weitere Informationen erhalten.<br>Wenn dies ein Fehler ist, bitte kontaktieren Sie uns über info@birdlife-zuerich.ch<br><br>Mit herzlichen Grüssen<br>BirdLife Zürich<br>Wiedingstrasse 78<br>8045 Zürich<br><br></br>info@birdlife-zuerich.ch<br>www.birdlife-zuerich.ch";
+                      $txt = "Guten Tag.<br><br>Sie wurden von " . $first_name . " " . $last_name . ", " . $first_person_email . " für folgenden Kurs angemeldet:<br>" . $title . "<br><br>Angaben zu ihrer Person:<br>" . $second_person_first_name . " " . $second_person_last_name . "<br>" . $second_person_email . "<br>" . $street . " <br><br>" . $postal_code . " " . $city . "<br><br>Sie werden in den nächsten Tagen von uns weitere Informationen erhalten.<br>Wenn dies ein Fehler ist, bitte kontaktieren Sie uns über kurse@birdlife-zuerich.ch<br><br>Mit herzlichen Grüssen<br>BirdLife Zürich<br>Wiedingstrasse 78<br>8045 Zürich<br><br></br>kurse@birdlife-zuerich.ch<br>www.birdlife-zuerich.ch";
                     } else {
-                      $txt = "Guten Tag.<br><br>Sie wurden von " . $first_name . " " . $last_name . ", " . $first_person_email . " für folgenden Kurs angemeldet:<br>" . $title . "<br><br>Angaben zu ihrer Person:<br>" . $second_person_first_name . " " . $second_person_last_name . "<br>" . $second_person_email . "<br><br>Sie werden in den nächsten Tagen von uns weitere Informationen erhalten.<br>Wenn dies ein Fehler ist, bitte kontaktieren Sie uns über info@birdlife-zuerich.ch<br><br>Mit herzlichen Grüssen<br>BirdLife Zürich<br>Wiedingstrasse 78<br>8045 Zürich<br><br></br>info@birdlife-zuerich.ch<br>www.birdlife-zuerich.ch";
+                      $txt = "Guten Tag.<br><br>Sie wurden von " . $first_name . " " . $last_name . ", " . $first_person_email . " für folgenden Kurs angemeldet:<br>" . $title . "<br><br>Angaben zu ihrer Person:<br>" . $second_person_first_name . " " . $second_person_last_name . "<br>" . $second_person_email . "<br><br>Sie werden in den nächsten Tagen von uns weitere Informationen erhalten.<br>Wenn dies ein Fehler ist, bitte kontaktieren Sie uns über kurse@birdlife-zuerich.ch<br><br>Mit herzlichen Grüssen<br>BirdLife Zürich<br>Wiedingstrasse 78<br>8045 Zürich<br><br></br>kurse@birdlife-zuerich.ch<br>www.birdlife-zuerich.ch";
                     }
                     
                     mail( $to, $subject, $txt, $headers );
@@ -285,7 +330,7 @@
         $posts = get_posts(
           array(
             'post_type'    => 'naturkurs',
-            'number_posts' => - 1,
+            'number_posts' => 20,
             'post_status'  => 'any'
           )
         );

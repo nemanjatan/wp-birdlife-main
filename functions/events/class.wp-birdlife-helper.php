@@ -51,6 +51,13 @@
         $wp_birdlife_event_neues_feld                     = $item['wp_birdlife_event_neues_feld'];
         $wp_birdlife_event_status                         = $item['wp_birdlife_event_status'];
         $wp_birdlife_event_currency_voc                   = $item['wp_birdlife_event_currency_voc'];
+        $wp_birdlife_event_project_ref                    = $item['wp_birdlife_event_project_ref'];
+        $wp_birdlife_event_pro_species_grp_id             = $item['wp_birdlife_event_pro_species_grp_id'];
+        $wp_birdlife_event_pro_species_grp_name           = $item['wp_birdlife_event_pro_species_grp_id'];
+        $wp_birdlife_event_pro_record_type_voc            = $item['wp_birdlife_event_pro_record_type_voc'];
+        $wp_birdlife_event_type_voc                       = $item['wp_birdlife_event_type_voc'];
+        $wp_birdlife_event_category_voc                   = $item['wp_birdlife_event_category_voc'];
+        $wp_birdlife_event_category_voc_parent            = $item['wp_birdlife_event_category_voc_parent'];
         $wp_birdlife_event_featured_image                 = $item['wp_birdlife_event_featured_image'];
         $wp_birdlife_event_featured_image_photocredit_txt = $item['wp_birdlife_event_featured_image_photocredit_txt'];
         $wp_birdlife_leitung_plain                        = $item['leitung'];
@@ -310,6 +317,34 @@
           $meta_inputs['wp_birdlife_event_currency_voc'] = $wp_birdlife_event_currency_voc;
         }
         
+        if ( ! empty( $wp_birdlife_event_project_ref ) ) {
+          $meta_inputs['wp_birdlife_event_project_ref'] = $wp_birdlife_event_project_ref;
+        }
+        
+        if ( ! empty( $wp_birdlife_event_pro_record_type_voc ) ) {
+          $meta_inputs['wp_birdlife_event_pro_record_type_voc'] = $wp_birdlife_event_pro_record_type_voc;
+        }
+        
+        if ( ! empty( $wp_birdlife_event_pro_species_grp_id ) ) {
+          $meta_inputs['wp_birdlife_event_pro_species_grp_id'] = $wp_birdlife_event_pro_species_grp_id;
+        }
+        
+        if ( ! empty( $wp_birdlife_event_pro_species_grp_name ) ) {
+          $meta_inputs['wp_birdlife_event_pro_species_grp_name'] = $wp_birdlife_event_pro_species_grp_name;
+        }
+        
+        if ( ! empty( $wp_birdlife_event_type_voc ) ) {
+          $meta_inputs['wp_birdlife_event_type_voc'] = $wp_birdlife_event_type_voc;
+        }
+        
+        if ( ! empty( $wp_birdlife_event_category_voc_parent ) ) {
+          $meta_inputs['wp_birdlife_event_category_voc_parent'] = $wp_birdlife_event_category_voc_parent;
+        }
+        
+        if ( ! empty( $wp_birdlife_event_category_voc ) ) {
+          $meta_inputs['wp_birdlife_event_category_voc'] = $wp_birdlife_event_category_voc;
+        }
+        
         if ( ! empty( $wp_birdlife_event_featured_image ) ) {
           $meta_inputs['wp_birdlife_event_featured_image']        = $wp_birdlife_event_featured_image;
           $meta_inputs['wp_birdlife_event_featured_image_exists'] = 'yes';
@@ -465,6 +500,16 @@
         }
         
         return $error;
+      }
+      
+      public function get_manage_plus_api_args_no_body(): array {
+        return array(
+          'headers' => array(
+            'Authorization' => 'Basic ' . base64_encode( MANAGE_PLUS_USERNAME . ':' . MANAGE_PLUS_PASSWORD ),
+            'Content-Type'  => 'application/xml'
+          ),
+          'timeout' => 50
+        );
       }
       
       public function get_manage_plus_api_args( string $xml ): array {

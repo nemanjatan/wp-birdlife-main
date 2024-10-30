@@ -15,15 +15,21 @@
         $second_xml           = file_get_contents( WP_BIRDLIFE_PATH . 'xml/booking-event/booking.xml' );
         $second_person_exists = false;
         
-        $event_id               = $_POST['event_id'];     // event_id
-        $first_name             = $_POST['first_name'];   // BokForeNameTxt
-        $last_name              = $_POST['last_name'];    // BokSurNameTxt
-        $street                 = $_POST['street'];       // BokStreetTxt
-        $postal_code            = $_POST['postal_code'];  // BokPostcodeTxt
-        $city                   = $_POST['city'];         // BokCityTxt
-        $email                  = $_POST['email'];        // BokEmailTxt
-        $phone_number           = $_POST['phone_number']; // BokPhoneTxt
-        $agb                    = $_POST['agb'];          // can NOT be empty
+        $event_id     = $_POST['event_id'];     // event_id
+        $first_name   = $_POST['first_name'];   // BokForeNameTxt
+        $last_name    = $_POST['last_name'];    // BokSurNameTxt
+        $street       = $_POST['street'];       // BokStreetTxt
+        $postal_code  = $_POST['postal_code'];  // BokPostcodeTxt
+        $city         = $_POST['city'];         // BokCityTxt
+        $email        = $_POST['email'];        // BokEmailTxt
+        $phone_number = $_POST['phone_number']; // BokPhoneTxt
+        $agb          = $_POST['agb'];          // can NOT be empty
+        $newsletter   = false;
+        
+        if ( isset( $_POST['newsletter'] ) ) {
+          $newsletter = true;
+        }
+        
         $event_course_label_txt = $_POST['wp_birdlife_event_title'];
         
         $xml_content = '<dataField dataType="Varchar" name="BokForeNameTxt"> <value>' . $first_name . '</value> </dataField>';
@@ -113,7 +119,7 @@
         // Eingangsdatum is written: Field Called „BokReceiptDat“
         $xml_content = $xml_content . '<dataField dataType="Date" name="BokReceiptDat"> <value>' . date( 'Y-m-d' ) . '</value> </dataField>';
         
-        $xml_content = $xml_content . '<dataField dataType="Date" name="BokBookingTitleTxt"> <value>Anmeldung ' . $event_course_label_txt . '</value> </dataField>';
+        $xml_content = $xml_content . '<dataField dataType="Date" name="BokBookingTitleTxt"> <value>Anmeldung ' . htmlspecialchars( $event_course_label_txt ) . '</value> </dataField>';
         
         $second_person_email = '';
         
@@ -141,7 +147,7 @@
           $second_xml_content = $second_xml_content . '<repeatableGroup name="BokStatusGrp"> <repeatableGroupItem> <dataField dataType="Date" name="DateDat"> <value>' . date( 'Y-m-d' ) . '</value> </dataField> <vocabularyReference name="StatusVoc" id="100038387" instanceName="BokStatusVgr"> <vocabularyReferenceItem id="100118404" name="booked"> <formattedValue language="en">Eingang</formattedValue> </vocabularyReferenceItem> </vocabularyReference> </repeatableGroupItem> </repeatableGroup>';
           
           $second_xml_content = $second_xml_content . '<vocabularyReference name="BokTypeVoc" id="100038388" instanceName="BokTypeVgr"> <vocabularyReferenceItem id="100176567" name="online_wp"> <formattedValue language="en">Online via Wordpress</formattedValue> </vocabularyReferenceItem> </vocabularyReference>';
-          $second_xml_content = $second_xml_content . '<dataField dataType="Date" name="BokBookingTitleTxt"> <value>Anmeldung ' . $event_course_label_txt . '</value> </dataField>';
+          $second_xml_content = $second_xml_content . '<dataField dataType="Date" name="BokBookingTitleTxt"> <value>Anmeldung ' . htmlspecialchars( $event_course_label_txt ) . '</value> </dataField>';
           
           // Eingangsdatum is written: Field Called „BokReceiptDat“
           $second_xml_content = $second_xml_content . '<dataField dataType="Date" name="BokReceiptDat"> <value>' . date( 'Y-m-d' ) . '</value> </dataField>';
@@ -168,7 +174,8 @@
           $city,
           $second_person_first_name,
           $second_person_last_name,
-          $gleiche_adresse_active
+          $gleiche_adresse_active,
+          $newsletter
         );
       }
       

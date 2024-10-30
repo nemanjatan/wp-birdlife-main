@@ -85,7 +85,7 @@
                       if ( $module_reference['moduleReferenceItem']['@attributes']['moduleItemId'] !== null ) {
                         // fetch the image
                         $image_id                             = $module_reference['moduleReferenceItem']['@attributes']['moduleItemId'];
-                        $thumbnail_url                        = 'https://de1.zetcom-group.de/MpWeb-maZurichBirdlife/ria-ws/application/module/Multimedia/' . $image_id . '/attachment';
+                        $thumbnail_url                        = 'https://maBirdlife.zetcom.app/ria-ws/application/module/Multimedia/' . $image_id . '/attachment';
                         $args                                 = $this->get_manage_plus_api_attachment_args();
                         $resp                                 = wp_remote_get( $thumbnail_url, $args );
                         $wp_birdlife_project_multimedia_image = $resp['body'];
@@ -94,7 +94,7 @@
                         $multimedia_xml         = file_get_contents( WP_BIRDLIFE_PATH . 'xml/multimedia-search/event-multimedia-search.xml' );
                         $multimedia_xml         = str_replace( "{{multimedia_id}}", $image_id, $multimedia_xml );
                         $multimedia_args        = $helper->get_manage_plus_api_args( $multimedia_xml );
-                        $multimedia_resp        = wp_remote_post( 'https://de1.zetcom-group.de/MpWeb-maZurichBirdlife/ria-ws/application/module/Multimedia/search', $multimedia_args );
+                        $multimedia_resp        = wp_remote_post( 'https://maBirdlife.zetcom.app/ria-ws/application/module/Multimedia/search', $multimedia_args );
                         $multimedia_body        = $multimedia_resp['body'];
                         $parsed_multimedia_xml  = simplexml_load_string( $multimedia_body );
                         $multimedia_json        = json_encode( $parsed_multimedia_xml );

@@ -4,7 +4,7 @@
     class WP_Birdlife_Event_Reference {
       public function handle_event_involved( $module_reference, $helper ) {
         $management  = "";
-        $address_url = 'https://de1.zetcom-group.de/MpWeb-maZurichBirdlife/ria-ws/application/module/Address/search';
+        $address_url = 'https://maBirdlife.zetcom.app/ria-ws/application/module/Address/search';
         
         if ( is_array( $module_reference['moduleReferenceItem'] ) ) {
           // it has multiple addresses
@@ -130,7 +130,7 @@
       
       public function handle_event_involved_ref( $module_item, $helper ) {
         $management  = '';
-        $address_url = 'https://de1.zetcom-group.de/MpWeb-maZurichBirdlife/ria-ws/application/module/Address/search';
+        $address_url = 'https://maBirdlife.zetcom.app/ria-ws/application/module/Address/search';
         
         if ( is_array( $module_item['moduleReference']['moduleReferenceItem'] ) ) {
           foreach ( $module_item['moduleReference']['moduleReferenceItem'] as $address ) {
