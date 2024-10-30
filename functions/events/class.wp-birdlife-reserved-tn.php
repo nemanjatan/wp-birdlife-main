@@ -2,130 +2,117 @@
   
   if ( ! class_exists( 'WP_Birdlife_Reserved_Tn' ) ) {
     class WP_Birdlife_Reserved_Tn {
-      
-      private const BOOKING_SEARCH_URL = 'https://de1.zetcom-group.de/MpWeb-maZurichBirdlife/ria-ws/application/module/Booking/search/';
-      private const BOOKING_SEARCH_XML_PATH = WP_BIRDLIFE_PATH . 'xml/booking-event/book-event-search-all-fields.xml';
-      
       private function get_booking_search_url() {
-        return self::BOOKING_SEARCH_URL;
+        return 'https://de1.zetcom-group.de/MpWeb-maZurichBirdlife/ria-ws/application/module/Booking/search/';
       }
       
       private function get_number_of_events( $helper, $url, $xml ) {
-        $this->log_message( "Getting number of events from URL: $url" );
+        $args = $helper->get_manage_plus_api_args( $xml );
         
-        $args          = $helper->get_manage_plus_api_args( $xml );
-        $response      = wp_remote_post( $url, $args );
-        $response_body = $response['body'];
+        $resp      = wp_remote_post( $url, $args );
+        $resp_body = $resp['body'];
         
-        $parsed_xml  = simplexml_load_string( $response_body );
+        $parsed_xml  = simplexml_load_string( $resp_body );
         $json        = json_encode( $parsed_xml );
         $parsed_json = json_decode( $json, true );
         
-        $total_size = $parsed_json['modules']['module']['@attributes']['totalSize'] ?? 0;
+        $total_size = $parsed_json['modules']['module']['@attributes']['totalSize'];
         
-        return ceil( $total_size / 10 );
+        return ( $total_size / 10 );
       }
       
       private function update_offset( $xml, $offset ) {
-        $this->log_message( "Updating offset to: $offset" );
-        
         return str_replace( "{{offset}}", $offset, $xml );
       }
       
       public function fetch_reserved_tn( $event_id ) {
-        $this->log_message( "Fetching reserved TN for event ID: $event_id" );
-        
         $helper = new WP_Birdlife_Helper();
         $url    = $this->get_booking_search_url();
-        $xml    = file_get_contents( self::BOOKING_SEARCH_XML_PATH );
+        $xml    = file_get_contents( WP_BIRDLIFE_PATH . 'xml/booking-event/book-event-search-all-fields.xml' );
         $xml    = str_replace( "{{offset}}", "0", $xml );
         $xml    = str_replace( "{{event_id}}", $event_id, $xml );
         
         $number_of_iterations = $this->get_number_of_events( $helper, $url, $xml );
         
-        $entry_count = 0;
+        $eingang = 0;
         
         if ( $number_of_iterations == 0 ) {
-          $this->log_message( "No events found for event ID: $event_id" );
-          
-          return $entry_count;
+          return $eingang;
         }
         
-        for ( $i = 0; $i < $number_of_iterations; $i ++ ) {
+        for ( $i = 0; $i <= $number_of_iterations; $i ++ ) {
           $offset = $i * 10;
-          $xml    = file_get_contents( self::BOOKING_SEARCH_XML_PATH );
-          $xml    = $this->update_offset( $xml, $offset );
+          $xml    = file_get_contents( WP_BIRDLIFE_PATH . 'xml/booking-event/book-event-search-all-fields.xml' );
+          $xml    = str_replace( "{{offset}}", $offset, $xml );
           $xml    = str_replace( "{{event_id}}", $event_id, $xml );
           
-          $args          = $helper->get_manage_plus_api_args( $xml );
-          $response      = wp_remote_post( $url, $args );
-          $response_body = $response['body'];
+          $xml = $this->update_offset( $xml, $offset );
           
-          $parsed_xml  = simplexml_load_string( $response_body );
+          $args = $helper->get_manage_plus_api_args( $xml );
+          
+          $resp      = wp_remote_post( $url, $args );
+          $resp_body = $resp['body'];
+          
+          $parsed_xml  = simplexml_load_string( $resp_body );
           $json        = json_encode( $parsed_xml );
           $parsed_json = json_decode( $json, true );
           
-          $module_items = $parsed_json['modules']['module']['moduleItem'] ?? [];
+          $module_items = $parsed_json['modules']['module']['moduleItem'];
           
-          $entry_count += $this->count_entries( $module_items );
-        }
-        
-        return $entry_count;
-      }
-      
-      private function count_entries( $module_items ) {
-        $this->log_message( "Counting 'Eingang' in module items" );
-        
-        $entry_count = 0;
-        
-        if ( isset( $module_items['systemField'][0]['value'] ) ) {
-          $vocabulary_reference = $module_items['vocabularyReference'] ?? [];
-          $entry_count          += $this->process_vocabulary_reference( $vocabulary_reference );
-        } else {
-          foreach ( $module_items as $module_item ) {
-            $vocabulary_reference = $module_item['vocabularyReference'] ?? [];
-            $entry_count          += $this->process_vocabulary_reference( $vocabulary_reference );
-          }
-        }
-        
-        return $entry_count;
-      }
-      
-      private function process_vocabulary_reference( $vocabulary_reference ) {
-        $this->log_message( "Processing vocabulary reference" );
-        
-        $entry_count = 0;
-        
-        if ( isset( $vocabulary_reference['@attributes']['name'] ) && $vocabulary_reference['@attributes']['name'] === 'BokStatusVoc' ) {
-          if ( isset( $vocabulary_reference['vocabularyReferenceItem']['@attributes']['name'] ) && $vocabulary_reference['vocabularyReferenceItem']['@attributes']['name'] === 'registration' ) {
-            if ( isset( $vocabulary_reference['vocabularyReferenceItem']['formattedValue'] ) && $vocabulary_reference['vocabularyReferenceItem']['formattedValue'] === 'Entry' ) {
-              $entry_count ++;
-            }
-          }
-        } else {
-          foreach ( $vocabulary_reference as $voc_ref ) {
-            if ( isset( $voc_ref['@attributes']['name'] ) && $voc_ref['@attributes']['name'] === 'BokStatusVoc' ) {
-              if ( isset( $voc_ref['vocabularyReferenceItem']['@attributes']['name'] ) && $voc_ref['vocabularyReferenceItem']['@attributes']['name'] === 'registration' ) {
-                if ( isset( $voc_ref['vocabularyReferenceItem']['formattedValue'] ) && $voc_ref['vocabularyReferenceItem']['formattedValue'] === 'Entry' ) {
-                  $entry_count ++;
+          if ( is_array( $module_items ) ) {
+            if ( $module_items['systemField'][0]['value'] !== null ) {
+              $vocabulary_ref = $module_items['vocabularyReference'];
+              if ( $vocabulary_ref['@attributes'] ) {
+                if ( $vocabulary_ref['@attributes'] === 'BokStatusVoc' ) {
+                  if ( $vocabulary_ref['vocabularyReferenceItem']['@attributes']['name'] === 'registration' ) {
+                    if ( $vocabulary_ref['vocabularyReferenceItem']['formattedValue'] === 'Eingang' ) {
+                      $eingang = $eingang + 1;
+                    }
+                  }
+                }
+              } else {
+                if ( is_array( $vocabulary_ref ) ) {
+                  foreach ( $vocabulary_ref as $voc_ref ) {
+                    if ( $voc_ref['@attributes']['name'] === 'BokStatusVoc' ) {
+                      if ( $voc_ref['vocabularyReferenceItem']['@attributes']['name'] === 'registration' ) {
+                        if ( $voc_ref['vocabularyReferenceItem']['formattedValue'] === 'Eingang' ) {
+                          $eingang = $eingang + 1;
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            } else {
+              foreach ( $module_items as $module_item ) {
+                $vocabulary_ref = $module_item['vocabularyReference'];
+                if ( $vocabulary_ref['@attributes'] ) {
+                  if ( $vocabulary_ref['@attributes'] === 'BokStatusVoc' ) {
+                    if ( $vocabulary_ref['vocabularyReferenceItem']['@attributes']['name'] === 'registration' ) {
+                      if ( $vocabulary_ref['vocabularyReferenceItem']['formattedValue'] === 'Eingang' ) {
+                        $eingang = $eingang + 1;
+                      }
+                    }
+                  }
+                } else {
+                  if ( is_array( $vocabulary_ref ) ) {
+                    foreach ( $vocabulary_ref as $voc_ref ) {
+                      if ( $voc_ref['@attributes']['name'] === 'BokStatusVoc' ) {
+                        if ( $voc_ref['vocabularyReferenceItem']['@attributes']['name'] === 'booked' ) {
+                          if ( $voc_ref['vocabularyReferenceItem']['formattedValue'] === 'Eingang' ) {
+                            $eingang = $eingang + 1;
+                          }
+                        }
+                      }
+                    }
+                  }
                 }
               }
             }
           }
         }
         
-        return $entry_count;
-      }
-      
-      private function log_message( $message ) {
-        $logDir = __DIR__ . '/logs';
-        if ( ! is_dir( $logDir ) ) {
-          mkdir( $logDir, 0777, true );
-        }
-        $logFile          = $logDir . "/birdlife_reserved_tn_log.txt";
-        $currentDateTime  = date( 'Y-m-d H:i:s' );
-        $formattedMessage = $currentDateTime . " - " . $message . "\n";
-        file_put_contents( $logFile, $formattedMessage, FILE_APPEND );
+        return $eingang;
       }
     }
   }
