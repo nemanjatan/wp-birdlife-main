@@ -2,10 +2,63 @@
 
 if ( ! class_exists( 'WP_Birdlife_Event' ) ) {
 	class WP_Birdlife_Event {
-		public function fetch_all_events( $counter ): void {
+      private function set_past_events_to_draft() {
+        $args = array(
+          'numberposts' => - 1,
+          'post_type'   => 'naturkurs',
+          'post_status' => array( 'publish', 'future' ) // Include any statuses where the event is active
+        );
+        
+        $all_naturkurs = get_posts( $args );
+        $total_posts   = count( $all_naturkurs );
+        error_log( "set_past_events_to_draft: Starting to process $total_posts posts." );
+        
+        foreach ( $all_naturkurs as $naturkurs ) {
+          $post_id    = $naturkurs->ID;
+          $post_title = get_the_title( $post_id );
+          $date_to    = get_post_meta( $post_id, 'wp_birdlife_event_date_to_dat', true );
+          
+          // Log the post being processed
+          error_log( "Processing post ID: $post_id, Title: '$post_title'." );
+          
+          if ( ! empty( $date_to ) ) {
+            $date_to_timestamp      = strtotime( $date_to );
+            $current_time           = time();
+            $formatted_date_to      = date( 'Y-m-d H:i:s', $date_to_timestamp );
+            $formatted_current_time = date( 'Y-m-d H:i:s', $current_time );
+            
+            error_log( "Post ID $post_id has 'date_to': $formatted_date_to." );
+            
+            if ( $date_to_timestamp < $current_time ) {
+              // Event is in the past, set post to 'draft'
+              $update_result = wp_update_post( array(
+                'ID'          => $post_id,
+                'post_status' => 'draft'
+              ), true );
+              
+              if ( is_wp_error( $update_result ) ) {
+                error_log( "Failed to set post ID $post_id to 'draft'. Error: " . $update_result->get_error_message() );
+              } else {
+                error_log( "Post ID $post_id is in the past (Date To: $formatted_date_to). Set status to 'draft'." );
+              }
+            } else {
+              error_log( "Post ID $post_id is not in the past (Date To: $formatted_date_to, Current Time: $formatted_current_time). No action taken." );
+            }
+          } else {
+            error_log( "Post ID $post_id has no 'date_to' meta value. Skipping." );
+          }
+        }
+        
+        error_log( "set_past_events_to_draft: Finished processing posts." );
+      }
+      
+      public function fetch_all_events( $counter ): void {
 			$helper                = new WP_Birdlife_Helper();
 			$birdlife_new_event    = new WP_Birdlife_New_Event();
 			$birdlife_update_event = new WP_Birdlife_Update_Event();
+        
+            // Set past events to draft before syncing new events
+            $this->set_past_events_to_draft();
 
 			$url       = $this->get_event_search_url();
 			$xml       = file_get_contents( WP_BIRDLIFE_PATH . 'xml/event-search/event-search-all-fields.xml' );
