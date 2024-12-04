@@ -59,8 +59,10 @@ if ( ! class_exists( 'WP_Birdlife' ) ) {
 
 			require_once( WP_BIRDLIFE_PATH . 'class.wp-birdlife-settings.php' );
 			$WP_Birdlife_Settings = new WP_Birdlife_Settings();
-
-			add_action( 'admin_menu', array( $this, 'add_menu' ) );
+          
+            require_once ( WP_BIRDLIFE_PATH . 'wp-birdlife-sync.php' );
+            
+            add_action( 'admin_menu', array( $this, 'add_menu' ) );
 
 			// events
 			add_action( 'admin_footer', array( $WP_Birdlife_Event, 'hard_refresh_ajax_script' ) );

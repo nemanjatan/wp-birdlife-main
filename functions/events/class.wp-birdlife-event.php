@@ -409,5 +409,68 @@ if ( ! class_exists( 'WP_Birdlife_Event' ) ) {
 
 			return $resp['body'];
 		}
-	}
+      
+        public function process_all_events() {
+          $helper                = new WP_Birdlife_Helper();
+          $birdlife_new_event    = new WP_Birdlife_New_Event();
+          $birdlife_update_event = new WP_Birdlife_Update_Event();
+          
+          // Set past events to draft before syncing new events
+          $this->set_past_events_to_draft();
+          
+          $url       = $this->get_event_search_url();
+          $xml       = file_get_contents( WP_BIRDLIFE_PATH . 'xml/event-search/event-search-all-fields.xml' );
+          $event_ids = array();
+          
+          $total_size = $this->get_number_of_events( $helper, $url, $xml );
+          update_option( 'wp_birdlife_total_size_of_events', $total_size );
+          
+          $batches = ceil( $total_size / 10 );
+          
+          for ( $counter = 0; $counter < $batches; $counter ++ ) {
+            $offset = $counter * 10;
+            $xml    = file_get_contents( WP_BIRDLIFE_PATH . 'xml/event-search/event-search-specific-fields.xml' );
+            
+            $resp_body = $this->get_module_items( $helper, $xml, $offset, $url );
+            
+            $parsed_xml  = simplexml_load_string( $resp_body );
+            $json        = json_encode( $parsed_xml );
+            $parsed_json = json_decode( $json, true );
+            
+            $module_items = $parsed_json['modules']['module']['moduleItem'];
+            
+            $formatted_arr = array();
+            
+            if ( $module_items == null ) {
+              continue;
+            }
+            
+            if ( $module_items['systemField'][0]['value'] === null ) {
+              foreach ( $module_items as $module_item ) {
+                $post        = $this->get_naturkurs_post_by_event_id( $module_item['systemField'][0]['value'] );
+                $event_ids[] = $module_item['systemField'][0]['value'];
+                
+                if ( is_array( $post ) ) {
+                  if ( count( $post ) == 1 ) {
+                    $birdlife_update_event->update_events(
+                      $module_item,
+                      $helper,
+                      $post
+                    );
+                  } else {
+                    $module_item_arr = $birdlife_new_event->save_new_events(
+                      $module_item,
+                      $helper
+                    );
+                    $formatted_arr[] = $module_item_arr;
+                  }
+                }
+              }
+            }
+          }
+          
+          // Update last sync time
+          update_option( 'wp_birdlife_last_sync', time() );
+        }
+    }
 }
